@@ -972,3 +972,6 @@ html.menu-open .topbar .logo{filter:brightness(0)}
 @media(min-width:601px){
   .topbar{margin:0;left:calc(max(7vw,(100% - 1280px) / 2) - 22px);right:auto;width:calc(min(1280px,100% - 14vw) + 31px)}
 }
+/* подвал: все колонки начинаются сверху на одной линии */
+.foot-grid nav.fcol{justify-content:flex-start;align-content:start}
+.foot-grid{align-items:start}
