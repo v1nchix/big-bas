@@ -975,3 +975,11 @@ html.menu-open .topbar .logo{filter:brightness(0)}
 /* подвал: все колонки начинаются сверху на одной линии */
 .foot-grid nav.fcol{justify-content:flex-start;align-content:start}
 .foot-grid{align-items:start}
+/* подвал: колонки совпадают и сверху, и снизу */
+@media(min-width:1101px){
+  .foot-grid{align-items:stretch}
+  .foot-grid .fcol.fbrand{display:flex;flex-direction:column}
+  .foot-grid .fcol.fbrand .btn{margin-top:auto}
+  .foot-grid nav.fcol{justify-content:space-between}
+  .foot-grid .fcol.fbrand .logo.big{margin-top:5px}
+}
