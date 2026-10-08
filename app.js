@@ -25,7 +25,7 @@ if('IntersectionObserver' in window){
       // карточка выезжает, только когда её фото уже загрузилось, иначе фото «выпрыгивает» следом
       const imgs=[...el.querySelectorAll('img')].filter(im=>!im.complete);
       imgs.forEach(im=>im.loading='eager');
-      const ready=Promise.race([Promise.all(imgs.map(im=>new Promise(r=>{im.addEventListener('load',r,{once:true});im.addEventListener('error',r,{once:true})}))),new Promise(r=>setTimeout(r,1500))]);
+      const ready=Promise.race([Promise.all(imgs.map(im=>new Promise(r=>{im.addEventListener('load',r,{once:true});im.addEventListener('error',r,{once:true})}))),new Promise(r=>setTimeout(r,350))]);
       ready.then(()=>setTimeout(()=>{
         el.style.transitionDelay=(base+i*step)+'s';
         el.classList.add('in');
@@ -34,6 +34,9 @@ if('IntersectionObserver' in window){
     });
   },mobRv?{threshold:.15,rootMargin:'0px 0px -10% 0px'}:{threshold:.12,rootMargin:'0px 0px -6% 0px'});
   rvItems.forEach(e=>rvo.observe(e));
+  // фото карточек начинают грузиться заранее, за экран до появления
+  const pre=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;pre.unobserve(e.target);e.target.querySelectorAll('img[loading=lazy]').forEach(im=>im.loading='eager')}),{rootMargin:'900px 0px'});
+  rvItems.forEach(e=>pre.observe(e));
 }
 
 // свет следует за курсором

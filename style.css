@@ -946,3 +946,6 @@ html.menu-open .topbar .logo{filter:brightness(0)}
   .js .rv.in{scale:1}
   .js .rv.in{will-change:auto}
 }
+/* на касаниях карточки нажимаются быстро (0,12 с), но появление при листании должно идти полностью */
+@media (hover:none){.js .rv{transition-duration:1.1s !important}}
+@media (hover:none) and (prefers-reduced-motion:reduce){.js .rv{transition-duration:.8s !important}}
