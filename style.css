@@ -1011,3 +1011,21 @@ form .via .btn{margin:0;padding:15px 14px;gap:10px;letter-spacing:.16em}
 .mcta .btn.mtg .wa-i{color:#1b8fd0}
 .toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));z-index:120;translate:-50% 20px;opacity:0;pointer-events:none;max-width:min(92vw,440px);padding:14px 20px;border-radius:16px;background:#111114;color:#fff;font-size:14px;line-height:1.45;text-align:center;box-shadow:0 16px 40px rgba(17,17,20,.3);transition:opacity .3s var(--ease-out),translate .3s var(--ease-out)}
 .toast.on{opacity:1;translate:-50% 0}
+/* контакты: кнопки мессенджеров в ряд, номер не рвётся, низ формы = низ карточек */
+.nowrap{white-space:nowrap}
+.via{grid-template-columns:repeat(auto-fit,minmax(118px,1fr))}
+form .via .btn{padding:14px 10px;gap:8px;letter-spacing:.08em}
+@media(min-width:1101px){
+  .order{align-items:stretch}
+  .order > div:first-child{display:flex;flex-direction:column}
+  .order .contacts-list{margin-top:auto}
+}
+form .via .btn{grid-column:auto}
+.via{grid-template-columns:repeat(2,minmax(0,1fr))}
+.via:has(.v-max:not([hidden])){grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:600px){.via:has(.v-max:not([hidden])){grid-template-columns:minmax(0,1fr)}}
+@media(min-width:1101px){
+  .order .contacts-list{margin-top:34px;flex:1;display:flex;flex-direction:column}
+  .order .contacts-list .card{flex:1}
+  .order .maplink{flex:0 0 auto}
+}
