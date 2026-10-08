@@ -933,3 +933,10 @@ html.menu-open .topbar .logo{filter:brightness(0)}
   .head > .lead{grid-column:3;max-width:none;margin-top:0}
   .head > .btn{grid-column:3;justify-self:start}
 }
+/* телефон: плавная прокрутка. Без размытия под карточками и без смешивания зерна, вид тот же */
+@media(max-width:900px){
+  .card,.float,.fab-menu a,.filters{backdrop-filter:none;-webkit-backdrop-filter:none}
+  .float{background:rgba(255,255,255,.95)}
+  .filters{background:rgba(255,255,255,.97)}
+  body::after{mix-blend-mode:normal;opacity:.035}
+}

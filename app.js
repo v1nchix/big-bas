@@ -11,8 +11,8 @@ if(intro)setTimeout(()=>{document.documentElement.classList.remove('has-intro');
 
 // появление при прокрутке: блоки всплывают по очереди
 const rvSel='.hero .crumb,.hero h1,.hero .lead,.hero .btns,.hero .trust,.stage,.page-hero h1,.facts,.stats .card,.bento .svc,.mapcard';
-// на телефоне первый экран показываем сразу, без ожидания анимации
-const rvItems=[...document.querySelectorAll(rvSel)].filter(e=>!e.closest('.intro,.fab,.topbar,.foot,.steps4')&&!(matchMedia('(max-width:900px)').matches&&e.closest('.hero,.page-hero')));
+// на телефоне блоки не выезжают: всё стоит на месте сразу, прокрутка остаётся плавной
+const rvItems=matchMedia('(max-width:900px)').matches?[]:[...document.querySelectorAll(rvSel)].filter(e=>!e.closest('.intro,.fab,.topbar,.foot,.steps4'));
 if('IntersectionObserver' in window){
   rvItems.forEach(e=>e.classList.add('rv'));
   const rvo=new IntersectionObserver(es=>{
