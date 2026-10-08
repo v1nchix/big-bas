@@ -912,3 +912,17 @@ html.menu-open .topbar .logo{filter:brightness(0)}
   .car .price{white-space:nowrap}
   .car .price b{font-size:19px}
 }
+
+/* фильтр по ширине колонки контента, а не экрана */
+@media(min-width:601px){.filters{padding-left:max(7vw,calc((100% - 1280px) / 2));padding-right:max(7vw,calc((100% - 1280px) / 2))}}
+/* шапка: логотип на одной линии с контентом */
+@media(min-width:601px){.topbar{width:max(min(1240px,100% - 40px),calc(min(1280px,100% - 14vw) + 44px))}}
+.menu a{white-space:nowrap}
+@media(max-width:1360px){.menu{gap:22px}.menu a{letter-spacing:.18em}}
+/* первый экран главной по той же колонке, что и остальные блоки */
+@media(min-width:901px){.hero{padding-left:max(7vw,calc((100% - 1280px) / 2));padding-right:max(7vw,calc((100% - 1280px) / 2))}}
+@media(min-width:901px){
+  .hero{display:flex;align-items:center}
+  .hero > div:first-child{flex:1.05 1 0;min-width:min-content}
+  .hero > .stage{flex:.95 1 0;min-width:0}
+}
