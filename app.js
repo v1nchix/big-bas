@@ -19,13 +19,20 @@ if('IntersectionObserver' in window){
   const rvo=new IntersectionObserver(es=>{
     const vis=es.filter(e=>e.isIntersecting).map(e=>e.target);
     vis.forEach((el,i)=>{
+      rvo.unobserve(el);
       const base=intro&&el.closest('.hero,.page-hero')?1.3:0;
-      const step=mobRv?0.06:0.08;
-      el.style.transitionDelay=(base+i*step)+'s';
-      el.classList.add('in');rvo.unobserve(el);
-      setTimeout(()=>el.style.transitionDelay='',(base+i*step+1)*1000);
+      const step=mobRv?0.1:0.08;
+      // карточка выезжает, только когда её фото уже загрузилось, иначе фото «выпрыгивает» следом
+      const imgs=[...el.querySelectorAll('img')].filter(im=>!im.complete);
+      imgs.forEach(im=>im.loading='eager');
+      const ready=Promise.race([Promise.all(imgs.map(im=>new Promise(r=>{im.addEventListener('load',r,{once:true});im.addEventListener('error',r,{once:true})}))),new Promise(r=>setTimeout(r,1500))]);
+      ready.then(()=>setTimeout(()=>{
+        el.style.transitionDelay=(base+i*step)+'s';
+        el.classList.add('in');
+        setTimeout(()=>el.style.transitionDelay='',(base+i*step+1.2)*1000);
+      },20));
     });
-  },mobRv?{threshold:.05,rootMargin:'0px 0px -8% 0px'}:{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+  },mobRv?{threshold:.15,rootMargin:'0px 0px -10% 0px'}:{threshold:.12,rootMargin:'0px 0px -6% 0px'});
   rvItems.forEach(e=>rvo.observe(e));
 }
 
