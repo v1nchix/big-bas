@@ -11,19 +11,21 @@ if(intro)setTimeout(()=>{document.documentElement.classList.remove('has-intro');
 
 // появление при прокрутке: блоки всплывают по очереди
 const rvSel='.hero .crumb,.hero h1,.hero .lead,.hero .btns,.hero .trust,.stage,.page-hero h1,.facts,.stats .card,.bento .svc,.mapcard';
-// на телефоне блоки не выезжают: всё стоит на месте сразу, прокрутка остаётся плавной
-const rvItems=matchMedia('(max-width:900px)').matches?[]:[...document.querySelectorAll(rvSel)].filter(e=>!e.closest('.intro,.fab,.topbar,.foot,.steps4'));
+// на телефоне первый экран виден сразу, остальные блоки плавно проявляются при листании
+const mobRv=matchMedia('(max-width:900px)').matches;
+const rvItems=[...document.querySelectorAll(rvSel)].filter(e=>!e.closest('.intro,.fab,.topbar,.foot,.steps4')&&!(mobRv&&e.closest('.hero,.page-hero')));
 if('IntersectionObserver' in window){
   rvItems.forEach(e=>e.classList.add('rv'));
   const rvo=new IntersectionObserver(es=>{
     const vis=es.filter(e=>e.isIntersecting).map(e=>e.target);
     vis.forEach((el,i)=>{
       const base=intro&&el.closest('.hero,.page-hero')?1.3:0;
-      el.style.transitionDelay=(base+i*0.08)+'s';
+      const step=mobRv?0.06:0.08;
+      el.style.transitionDelay=(base+i*step)+'s';
       el.classList.add('in');rvo.unobserve(el);
-      setTimeout(()=>el.style.transitionDelay='',(base+i*0.08+1)*1000);
+      setTimeout(()=>el.style.transitionDelay='',(base+i*step+1)*1000);
     });
-  },{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+  },mobRv?{threshold:.05,rootMargin:'0px 0px -8% 0px'}:{threshold:.12,rootMargin:'0px 0px -6% 0px'});
   rvItems.forEach(e=>rvo.observe(e));
 }
 
