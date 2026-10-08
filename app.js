@@ -61,14 +61,21 @@ if(odos.length&&'IntersectionObserver' in window&&!matchMedia('(prefers-reduced-
 
 const rub=n=>n.toLocaleString('ru-RU')+' ₽';
 
-// заявка: пока без сервера, собираем письмо на почту компании
+// заявка: открываем WhatsApp с готовым сообщением на рабочий номер
 const form=document.getElementById('order');
 if(form){
   form.addEventListener('submit',e=>{
     e.preventDefault();
-    const f=new FormData(form),lines=[];
-    for(const [k,v] of f) if(v) lines.push(k+': '+v);
-    location.href='mailto:ooo.bigbas@yandex.ru?subject='+encodeURIComponent('Заявка с сайта')+'&body='+encodeURIComponent(lines.join('\n'));
+    const lines=['Здравствуйте! Заявка с сайта БИГ-БАС'];
+    for(let [k,v] of new FormData(form)){
+      v=String(v).trim();if(!v)continue;
+      if(k==='Дата'){const d=v.split('-');if(d.length===3)v=d[2]+'.'+d[1]+'.'+d[0];}
+      lines.push(k+': '+v);
+    }
+    const url='https://wa.me/79996667738?text='+encodeURIComponent(lines.join('\n'));
+    // на телефоне сразу в приложение, на компьютере в новой вкладке
+    const w=matchMedia('(pointer:coarse)').matches?null:window.open(url,'_blank');
+    if(w)w.opener=null;else location.href=url;
   });
 }
 
