@@ -81,22 +81,34 @@ if(odos.length&&'IntersectionObserver' in window&&!matchMedia('(prefers-reduced-
 const rub=n=>n.toLocaleString('ru-RU')+' ₽';
 const seatWord=n=>{const a=n%10,b=n%100;return a===1&&b!==11?'место':a>=2&&a<=4&&(b<10||b>=20)?'места':'мест'};
 
-// заявка: открываем WhatsApp с готовым сообщением на рабочий номер
-const sendWA=(f,head)=>{
+// рабочие контакты; ссылку на профиль MAX вписать сюда, и кнопки MAX появятся сами
+const CONTACT={wa:'https://wa.me/79250205571',tg:'https://t.me/+79250205571',max:''};
+document.querySelectorAll('[data-max]').forEach(el=>{if(CONTACT.max){el.hidden=false;if(el.tagName==='A')el.href=CONTACT.max}else el.hidden=true});
+
+// короткая подсказка внизу экрана
+const toast=msg=>{let t=document.querySelector('.toast');if(!t){t=document.createElement('div');t.className='toast';t.setAttribute('role','status');document.body.appendChild(t)}
+  t.textContent=msg;t.classList.add('on');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('on'),5000)};
+const copyText=txt=>{try{const a=document.createElement('textarea');a.value=txt;a.setAttribute('readonly','');a.style.cssText='position:fixed;opacity:0;top:0';document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}catch(e){}
+  if(navigator.clipboard)navigator.clipboard.writeText(txt).catch(()=>{})};
+const openLink=url=>{const w=matchMedia('(pointer:coarse)').matches?null:window.open(url,'_blank');if(w)w.opener=null;else location.href=url};
+
+// заявка: WhatsApp открывается с готовым текстом; в Telegram и MAX текст копируется, чат открывается
+const sendWA=(f,head,via='wa')=>{
   const lines=['Здравствуйте! Заявка с сайта БИГ-БАС',...head];
   for(let [k,v] of new FormData(f)){
     v=String(v).trim();if(!v)continue;
     if(k==='Дата'){const d=v.split('-');if(d.length===3)v=d[2]+'.'+d[1]+'.'+d[0];}
     lines.push(k+': '+v);
   }
-  const url='https://wa.me/79996667738?text='+encodeURIComponent(lines.join('\n'));
-  // на телефоне сразу в приложение, на компьютере в новой вкладке
-  const w=matchMedia('(pointer:coarse)').matches?null:window.open(url,'_blank');
-  if(w)w.opener=null;else location.href=url;
+  const text=lines.join('\n');
+  if(via==='wa')return openLink(CONTACT.wa+'?text='+encodeURIComponent(text));
+  copyText(text);
+  toast('Заявка скопирована. Вставьте её в чат и нажмите «Отправить»');
+  setTimeout(()=>openLink(CONTACT[via]||CONTACT.wa),via==='tg'?700:700);
 };
 const form=document.getElementById('order');
 if(form){
-  form.addEventListener('submit',e=>{e.preventDefault();sendWA(form,[])});
+  form.addEventListener('submit',e=>{e.preventDefault();sendWA(form,[],e.submitter&&e.submitter.dataset.via)});
   // карточка услуги: тема поездки сразу в комментарии заявки
   const note=form.querySelector('[name="Комментарий"]');
   document.querySelectorAll('[data-svc]').forEach(a=>a.addEventListener('click',()=>{
@@ -171,7 +183,7 @@ if(cars.length){
           b.onclick=()=>{sel.value=cars.indexOf(x);calc();cp.focus()};box.appendChild(b)});
         warn.appendChild(box);
       }else{
-        const t=document.createElement('p');t.innerHTML='Для такой группы соберём несколько машин: отправьте заявку, менеджер подберёт колонну. Или позвоните: <a href="tel:+79996667738">+7 999 666-77-38</a>.';
+        const t=document.createElement('p');t.innerHTML='Для такой группы соберём несколько машин: отправьте заявку, менеджер подберёт колонну. Или позвоните: <a href="tel:+79250205571">+7 925 020-55-71</a>.';
         warn.appendChild(t);
       }
     };
@@ -188,7 +200,7 @@ if(cars.length){
       const {c,work,extra,total}=st;
       const head=['Машина: '+c.dataset.name+' ('+c.dataset.seatsText+')','Время: '+work+' ч + '+extra+' ч подачи','Примерная стоимость: '+rub(total)];
       if(tooMany)head.push('Нужно несколько машин');
-      sendWA(co,head);
+      sendWA(co,head,e.submitter&&e.submitter.dataset.via);
     });
   }
   people.oninput=apply;

@@ -988,3 +988,26 @@ html.menu-open .topbar .logo{filter:brightness(0)}
 .svc p{color:rgba(255,255,255,.92)}
 /* правка 4: свои фото в услугах, кадр по центру */
 .svc img,.svc.big img{object-position:50% 50%}
+/* правка 5: все заголовки блоков одного размера */
+h2,h2.xl{font-size:clamp(28px,3.9vw,58px)}
+@media(max-width:600px){h2,h2.xl{font-size:max(22px,6.6vw)}}
+/* кнопки мессенджеров в заявке, контактах, меню */
+[hidden]{display:none !important}
+.via{grid-column:1 / -1;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:6px}
+.via .label{grid-column:1 / -1}
+form .via .btn{margin:0;padding:15px 14px;gap:10px;letter-spacing:.16em}
+.via .btn svg{width:18px;height:18px;flex:none}
+.via .v-wa svg{color:#25d366}.via .v-tg svg{color:#2aabee}.via .v-max svg{color:#8f6bff}
+@media (hover:hover) and (pointer:fine){.via .btn.solid:hover svg{color:#111114}}
+.msgr{flex-wrap:wrap}
+.msgr-links{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
+.contacts-list .msgr-links{text-align:left}
+.msgr-links a{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:8px 14px;border-radius:100px;border:1px solid var(--line);background:#fff;font-size:14px;transition:border-color .2s var(--ease-out),box-shadow .2s var(--ease-out)}
+.msgr-links a svg{width:17px;height:17px}
+.msgr-links a:nth-child(1) svg{color:#25d366}.msgr-links a:nth-child(2) svg{color:#2aabee}.msgr-links a:nth-child(3) svg{color:#8f6bff}
+@media (hover:hover) and (pointer:fine){.msgr-links a:hover{border-color:var(--glow);box-shadow:0 6px 20px rgba(var(--glow-rgb),.3)}}
+@media(max-width:600px){.msgr-links{justify-content:flex-start}}
+.fab-menu i.tg{background:#2aabee}.fab-menu i.mx{background:#8f6bff}
+.mcta .btn.mtg .wa-i{color:#1b8fd0}
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));z-index:120;translate:-50% 20px;opacity:0;pointer-events:none;max-width:min(92vw,440px);padding:14px 20px;border-radius:16px;background:#111114;color:#fff;font-size:14px;line-height:1.45;text-align:center;box-shadow:0 16px 40px rgba(17,17,20,.3);transition:opacity .3s var(--ease-out),translate .3s var(--ease-out)}
+.toast.on{opacity:1;translate:-50% 0}
