@@ -983,3 +983,6 @@ html.menu-open .topbar .logo{filter:brightness(0)}
   .foot-grid nav.fcol{justify-content:space-between}
   .foot-grid .fcol.fbrand .logo.big{margin-top:5px}
 }
+/* правка 4: затемнение низа карточек услуг, чтобы белый текст читался на белых автобусах */
+.svc .shade{background:linear-gradient(to top,rgba(10,10,12,.92) 0,rgba(10,10,12,.7) 40%,rgba(10,10,12,.25) 65%,rgba(10,10,12,0) 85%)}
+.svc p{color:rgba(255,255,255,.92)}
