@@ -986,3 +986,5 @@ html.menu-open .topbar .logo{filter:brightness(0)}
 /* правка 4: затемнение низа карточек услуг, чтобы белый текст читался на белых автобусах */
 .svc .shade{background:linear-gradient(to top,rgba(10,10,12,.92) 0,rgba(10,10,12,.7) 40%,rgba(10,10,12,.25) 65%,rgba(10,10,12,0) 85%)}
 .svc p{color:rgba(255,255,255,.92)}
+/* правка 4: свои фото в услугах, кадр по центру */
+.svc img,.svc.big img{object-position:50% 50%}
