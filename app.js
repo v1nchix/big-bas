@@ -11,7 +11,8 @@ if(intro)setTimeout(()=>{document.documentElement.classList.remove('has-intro');
 
 // появление при прокрутке: блоки всплывают по очереди
 const rvSel='.hero .crumb,.hero h1,.hero .lead,.hero .btns,.hero .trust,.stage,.page-hero h1,.facts,.stats .card,.bento .svc,.mapcard';
-const rvItems=[...document.querySelectorAll(rvSel)].filter(e=>!e.closest('.intro,.fab,.topbar,.foot,.steps4'));
+// на телефоне первый экран показываем сразу, без ожидания анимации
+const rvItems=[...document.querySelectorAll(rvSel)].filter(e=>!e.closest('.intro,.fab,.topbar,.foot,.steps4')&&!(matchMedia('(max-width:900px)').matches&&e.closest('.hero,.page-hero')));
 if('IntersectionObserver' in window){
   rvItems.forEach(e=>e.classList.add('rv'));
   const rvo=new IntersectionObserver(es=>{
@@ -28,10 +29,14 @@ if('IntersectionObserver' in window){
 
 // свет следует за курсором
 document.querySelectorAll('.card').forEach(c=>{
+  let raf=0,ev=null;
   c.addEventListener('mousemove',e=>{
-    const r=c.getBoundingClientRect();
-    c.style.setProperty('--x',(e.clientX-r.left)+'px');
-    c.style.setProperty('--y',(e.clientY-r.top)+'px');
+    ev=e;if(raf)return;
+    raf=requestAnimationFrame(()=>{
+      raf=0;const r=c.getBoundingClientRect();
+      c.style.setProperty('--x',(ev.clientX-r.left)+'px');
+      c.style.setProperty('--y',(ev.clientY-r.top)+'px');
+    });
   });
 });
 
@@ -39,16 +44,18 @@ document.querySelectorAll('.card').forEach(c=>{
 const odos=[...document.querySelectorAll('[data-odo]')];
 if(odos.length&&'IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
   odos.forEach(el=>{
-    const txt=el.textContent;el.setAttribute('aria-label',txt);el.textContent='';el.classList.add('odo');
+    // экранный диктор читает число целиком, а не ленту цифр
+    const txt=el.textContent;el.textContent='';el.classList.add('odo');
+    const sr=document.createElement('span');sr.className='sr-only';sr.textContent=txt;el.appendChild(sr);
     let k=0;
     for(const ch of txt){
       if(/\d/.test(ch)){
         const col=document.createElement('span'),strip=document.createElement('span');
-        col.className='odo-d';strip.className='odo-s';
+        col.className='odo-d';col.setAttribute('aria-hidden','true');strip.className='odo-s';
         strip.innerHTML=Array.from({length:20},(_,i)=>'<span>'+(i%10)+'</span>').join('');
         strip.dataset.to=10+ +ch;strip.style.transitionDelay=(k++*0.05)+'s';
         col.appendChild(strip);el.appendChild(col);
-      }else{const s=document.createElement('span');s.textContent=ch===' '?'\u00a0':ch;el.appendChild(s)}
+      }else{const s=document.createElement('span');s.setAttribute('aria-hidden','true');s.textContent=ch===' '?'\u00a0':ch;el.appendChild(s)}
     }
   });
   const io=new IntersectionObserver(es=>es.forEach(e=>{
@@ -60,57 +67,121 @@ if(odos.length&&'IntersectionObserver' in window&&!matchMedia('(prefers-reduced-
 }
 
 const rub=n=>n.toLocaleString('ru-RU')+' ₽';
+const seatWord=n=>{const a=n%10,b=n%100;return a===1&&b!==11?'место':a>=2&&a<=4&&(b<10||b>=20)?'места':'мест'};
 
 // заявка: открываем WhatsApp с готовым сообщением на рабочий номер
+const sendWA=(f,head)=>{
+  const lines=['Здравствуйте! Заявка с сайта БИГ-БАС',...head];
+  for(let [k,v] of new FormData(f)){
+    v=String(v).trim();if(!v)continue;
+    if(k==='Дата'){const d=v.split('-');if(d.length===3)v=d[2]+'.'+d[1]+'.'+d[0];}
+    lines.push(k+': '+v);
+  }
+  const url='https://wa.me/79996667738?text='+encodeURIComponent(lines.join('\n'));
+  // на телефоне сразу в приложение, на компьютере в новой вкладке
+  const w=matchMedia('(pointer:coarse)').matches?null:window.open(url,'_blank');
+  if(w)w.opener=null;else location.href=url;
+};
 const form=document.getElementById('order');
 if(form){
-  form.addEventListener('submit',e=>{
-    e.preventDefault();
-    const lines=['Здравствуйте! Заявка с сайта БИГ-БАС'];
-    for(let [k,v] of new FormData(form)){
-      v=String(v).trim();if(!v)continue;
-      if(k==='Дата'){const d=v.split('-');if(d.length===3)v=d[2]+'.'+d[1]+'.'+d[0];}
-      lines.push(k+': '+v);
-    }
-    const url='https://wa.me/79996667738?text='+encodeURIComponent(lines.join('\n'));
-    // на телефоне сразу в приложение, на компьютере в новой вкладке
-    const w=matchMedia('(pointer:coarse)').matches?null:window.open(url,'_blank');
-    if(w)w.opener=null;else location.href=url;
-  });
+  form.addEventListener('submit',e=>{e.preventDefault();sendWA(form,[])});
+  // карточка услуги: тема поездки сразу в комментарии заявки
+  const note=form.querySelector('[name="Комментарий"]');
+  document.querySelectorAll('[data-svc]').forEach(a=>a.addEventListener('click',()=>{
+    const line='Услуга: '+a.dataset.svc;
+    note.value=/^Услуга: .*/.test(note.value)?note.value.replace(/^Услуга: .*/,line):(note.value?line+'\n'+note.value:line);
+    setTimeout(()=>{note.classList.add('filled');setTimeout(()=>note.classList.remove('filled'),1600)},700);
+  }));
 }
 
-// автопарк: фильтр по типу и числу пассажиров
+// автопарк: фильтр по типу и числу пассажиров (считаем сидячие места)
 const cars=[...document.querySelectorAll('.car')];
+const sitOf=c=>+(c.dataset.sit||c.dataset.seats);
 if(cars.length){
   const chips=[...document.querySelectorAll('.chip')],people=document.getElementById('people'),empty=document.querySelector('.empty');
   let kind='all';
   const apply=()=>{
     const n=+people.value||0;let shown=0;
     cars.forEach(c=>{
-      const ok=(kind==='all'||c.dataset.kind===kind)&&(+c.dataset.seats>=n);
+      const ok=(kind==='all'||c.dataset.kind===kind)&&(sitOf(c)>=n);
       c.classList.toggle('hide',!ok);if(ok)shown++;
     });
-    chips.forEach(ch=>ch.classList.toggle('on',ch.dataset.kind===kind));
+    chips.forEach(ch=>{const on=ch.dataset.kind===kind;ch.classList.toggle('on',on);ch.setAttribute('aria-pressed',on)});
     empty.style.display=shown?'none':'block';
   };
   chips.forEach(ch=>ch.onclick=()=>{kind=ch.dataset.kind;apply()});
-  people.oninput=apply;
   const h=location.hash.slice(1);
   if(chips.some(c=>c.dataset.kind===h)){kind=h;apply();}
 
   // калькулятор
   const sel=document.getElementById('car'),hours=document.getElementById('hours'),out=document.getElementById('hours-out'),
         sum=document.getElementById('sum'),how=document.getElementById('how');
-  cars.forEach((c,i)=>{const o=document.createElement('option');o.value=i;o.textContent=c.dataset.name+' · '+c.dataset.seatsText;sel.appendChild(o)});
+  const groups={tour:'Туристические',micro:'Микроавтобусы',city:'Средние и городские'},og={};
+  cars.forEach((c,i)=>{
+    const k=c.dataset.kind;if(!og[k]){og[k]=document.createElement('optgroup');og[k].label=groups[k]||k;sel.appendChild(og[k])}
+    const o=document.createElement('option');o.value=i;o.textContent=c.dataset.name+' · '+c.dataset.seatsText;og[k].appendChild(o);
+  });
+  const st={};
   const calc=()=>{
-    const c=cars[sel.value],price=+c.dataset.price,min=+c.dataset.min,extra=+c.dataset.extra,h=+hours.value;
-    const work=Math.max(h,min),total=price*(work+extra);
-    out.textContent=h+' ч';
+    const c=cars[sel.value],price=+c.dataset.price,min=+c.dataset.min,extra=+c.dataset.extra;
+    hours.min=min;if(+hours.value<min)hours.value=min;
+    const work=+hours.value,total=price*(work+extra);
+    Object.assign(st,{c,work,extra,total});
+    out.textContent=work+' ч';
     sum.innerHTML=rub(total).replace(' ₽','<small> ₽</small>');
-    how.textContent=rub(price)+'/час × ('+work+' ч работы'+(h<min?', минимум '+min:'')+' + '+extra+' ч подачи)';
+    how.textContent=rub(price)+'/час × ('+work+' ч работы + '+extra+' ч подачи)';
+    if(co)syncOrder();
   };
+
+  // заявка прямо в калькуляторе: машина, часы и цена уже в ней, людей не больше мест
+  const co=document.getElementById('calc-order');
+  let syncOrder=()=>{};
+  if(co){
+    const pick=document.getElementById('co-pick'),cp=document.getElementById('co-people'),warn=document.getElementById('co-warn');
+    let tooMany=false;
+    syncOrder=()=>{
+      const {c,work,extra,total}=st,s=sitOf(c);
+      pick.innerHTML='<b>'+c.dataset.name+'</b><span>'+c.dataset.seatsText+' · '+work+' ч + '+extra+' ч подачи · примерно '+rub(total)+'</span>';
+      cp.max=s;cp.placeholder='до '+s+' человек';
+      const n=+cp.value||0;tooMany=n>s;
+      cp.setCustomValidity('');warn.hidden=!tooMany;warn.innerHTML='';
+      if(!tooMany)return;
+      const fit=[];cars.forEach((x,i)=>{if(sitOf(x)>=n&&!fit.some(f=>f.dataset.name===x.dataset.name&&sitOf(f)===sitOf(x)))fit.push(x)});
+      const p=document.createElement('p');
+      p.textContent='В машине '+c.dataset.name+' '+s+' '+seatWord(s)+(c.dataset.sit?' сидячих':'')+', '+n+' человек не поместятся.';
+      warn.appendChild(p);
+      if(fit.length){
+        cp.setCustomValidity('Выберите машину побольше: в этой '+s+' '+seatWord(s));
+        const t=document.createElement('p');t.textContent='Подойдут:';warn.appendChild(t);
+        const box=document.createElement('div');box.className='co-fit';
+        fit.forEach(x=>{const b=document.createElement('button');b.type='button';b.className='chip';
+          b.textContent=x.dataset.name+' · '+sitOf(x)+' '+seatWord(sitOf(x));
+          b.onclick=()=>{sel.value=cars.indexOf(x);calc();cp.focus()};box.appendChild(b)});
+        warn.appendChild(box);
+      }else{
+        const t=document.createElement('p');t.innerHTML='Для такой группы соберём несколько машин: отправьте заявку, менеджер подберёт колонну. Или позвоните: <a href="tel:+79996667738">+7 999 666-77-38</a>.';
+        warn.appendChild(t);
+      }
+    };
+    cp.addEventListener('input',syncOrder);
+    // число из фильтра «Сколько вас?» переносим в заявку
+    people.addEventListener('input',()=>{if(!cp.dataset.touched){cp.value=people.value;syncOrder()}});
+    cp.addEventListener('change',()=>cp.dataset.touched='1');
+    document.getElementById('to-order').addEventListener('click',e=>{
+      e.preventDefault();co.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+      setTimeout(()=>co.querySelector('input').focus({preventScroll:true}),600);
+    });
+    co.addEventListener('submit',e=>{
+      e.preventDefault();
+      const {c,work,extra,total}=st;
+      const head=['Машина: '+c.dataset.name+' ('+c.dataset.seatsText+')','Время: '+work+' ч + '+extra+' ч подачи','Примерная стоимость: '+rub(total)];
+      if(tooMany)head.push('Нужно несколько машин');
+      sendWA(co,head);
+    });
+  }
+  people.oninput=apply;
   sel.onchange=calc;hours.oninput=calc;calc();
-  cars.forEach((c,i)=>c.querySelector('.pick').onclick=()=>{sel.value=i;calc();document.getElementById('calc').scrollIntoView({behavior:'smooth'})});
+  cars.forEach((c,i)=>c.querySelector('.pick').onclick=e=>{e.preventDefault();sel.value=i;calc();document.getElementById('calc').scrollIntoView({behavior:'smooth'})});
 }
 
 // карта подачи: подсветка маршрута и подстановка в заявку
@@ -168,9 +239,13 @@ if(road2){
   // едет без остановок: шаг загорается, когда автобус проезжает мимо
   const drive=ms=>new Promise(res=>{const t0=performance.now();let last=-2;const f=t=>{const k=Math.min(1,(t-t0)/ms);const a=.08,r=k<a?k*k/(2*a):k<=1-a?k-a/2:1-a-(1-k)*(1-k)/(2*a),e=r/(1-a);const l=e*len;place(l);const idx=stops.filter(x=>l>=x-2).length-1;if(idx!==last){last=idx;setOn(idx)}k<1?requestAnimationFrame(f):res()};requestAnimationFrame(f)});
   const setOn=i=>{const ci=mobQ.matches?Math.max(i,0):i;steps.forEach((c,k)=>c.classList.toggle('on',k===ci));stopsG.querySelectorAll('.stop').forEach((c,k)=>c.classList.toggle('on',k<=i))};
+  // за пределами экрана автобус стоит и не тратит батарею
+  let onScreen=true,wake=null;
+  if('IntersectionObserver' in window)new IntersectionObserver(es=>{onScreen=es[0].isIntersecting;if(onScreen&&wake){wake();wake=null}}).observe(road2);
   const loop=async()=>{
     if(running)return;running=true;
     while(true){
+      if(!onScreen)await new Promise(r=>wake=r);
       setOn(-1);place(0);bus.style.opacity=1;
       await drive(7600);bus.style.opacity=0;await sleep(700);
     }
@@ -221,7 +296,16 @@ document.querySelectorAll('.burger').forEach(d=>{
     d.classList.toggle('is-open',open);document.documentElement.classList.toggle('menu-open',open);
     const tc=document.querySelector('meta[name=theme-color]');if(tc)tc.setAttribute('content',open?'#efa95e':'#ffffff');
     sum.setAttribute('aria-expanded',open?'true':'false');
+    // фокус уходит в меню и возвращается на кнопку после закрытия
+    if(open)setTimeout(()=>nav.querySelector('a').focus({preventScroll:true}),300);
+    else if(nav.contains(document.activeElement))sum.focus({preventScroll:true});
   };
+  nav.addEventListener('keydown',e=>{
+    if(e.key!=='Tab'||!d.classList.contains('is-open'))return;
+    const f=[sum,...nav.querySelectorAll('a')],i=f.indexOf(document.activeElement);
+    if(e.shiftKey&&i<=0){e.preventDefault();f[f.length-1].focus()}
+    else if(!e.shiftKey&&i===f.length-1){e.preventDefault();f[0].focus()}
+  });
   sum.addEventListener('click',e=>{e.preventDefault();set(!d.classList.contains('is-open'))});
   nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>set(false)));
   d.addEventListener('click',e=>{if(e.target===d&&d.classList.contains('is-open'))set(false)});
@@ -230,6 +314,21 @@ document.querySelectorAll('.burger').forEach(d=>{
 
 // iPhone показывает нажатие (:active) только если на странице есть обработчик касаний
 document.addEventListener('touchstart',()=>{},{passive:true});
+
+// видео стоянки грузится, только когда до него долистали
+document.querySelectorAll('video[data-lazy]').forEach(v=>{
+  if(!('IntersectionObserver' in window)){v.preload='auto';v.autoplay=true;return}
+  const io=new IntersectionObserver(es=>{if(!es[0].isIntersecting)return;io.disconnect();v.preload='auto';v.play().catch(()=>{})},{rootMargin:'300px 0px'});
+  io.observe(v);
+});
+
+// круглая кнопка связи становится оранжевой над тёмными блоками
+const fab=document.querySelector('.fab');
+if(fab&&'IntersectionObserver' in window){
+  const darks=new Set();
+  const io=new IntersectionObserver(es=>{es.forEach(e=>e.isIntersecting?darks.add(e.target):darks.delete(e.target));fab.classList.toggle('on-dark',darks.size>0)},{rootMargin:'-88% 0px 0px 0px'});
+  document.querySelectorAll('.dark,footer.foot,.total,.more').forEach(s=>io.observe(s));
+}
 
 // пустая дата серая, как подсказки в других полях
 document.querySelectorAll('input[type=date]').forEach(i=>{const f=()=>i.classList.toggle('is-empty',!i.value);f();i.addEventListener('input',f);i.addEventListener('change',f)});

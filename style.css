@@ -836,3 +836,79 @@ html.menu-open .topbar .logo{filter:brightness(0)}
   transition:opacity .35s var(--ease-out)}
 .burger.js-menu.is-open::before{opacity:1;pointer-events:auto}
 @media(max-width:600px){.mcta .btn.has-ic{padding:6px 6px 6px 18px}}
+
+/* ===== правки по проверке 08.10.2026 ===== */
+:root{--glow-text:#b85a17}
+/* переход к содержимому с клавиатуры */
+.skip{position:fixed;left:16px;top:-60px;z-index:300;padding:12px 18px;border-radius:100px;background:#111114;color:#fff;font-size:14px;transition:top .2s var(--ease-out)}
+.skip:focus{top:16px}
+/* обводка фокуса и оранжевый текст темнее, чтобы читались на белом */
+:focus-visible{outline-color:var(--ink)}
+.accent{background:linear-gradient(100deg,#a8561a 0%,#c4661f 55%,#d0702a 100%);-webkit-background-clip:text;background-clip:text}
+.dark .accent{background:linear-gradient(100deg,#fff 0%,#f7cf9f 40%,var(--glow) 100%);-webkit-background-clip:text;background-clip:text}
+.brand .accent{background:none}
+.steps4 .card.on .big-n{color:var(--glow-text)}@media (hover:hover) and (pointer:fine){.steps4 .card:hover .big-n{color:var(--glow-text)}}
+.scount b{color:var(--glow-text)}
+::placeholder{color:var(--dim);opacity:1}
+.small a{text-decoration:underline;text-underline-offset:2px}
+/* меню на оранжевом: подписи крупнее и контрастнее */
+.mn{font-size:11px;color:rgba(17,17,20,.72)}
+.mlabel{color:rgba(17,17,20,.78)}
+.mcta .btn{font-size:11px}
+/* телефон в шапке на мобильном */
+.tel-ic{display:none}
+@media(max-width:600px){
+  .top-right{gap:8px}
+  .tel-ic{display:grid;place-items:center;width:44px;height:44px;border-radius:100px;border:1px solid var(--line);background:#fff;color:var(--text)}
+  .tel-ic svg{width:18px;height:18px}
+  html.menu-open .tel-ic{opacity:0;pointer-events:none}
+  .topbar .btn.solid.sm{padding:12px 16px}
+}
+/* зоны нажатия от 44 px */
+.chip{min-height:44px}
+.car .btn.sm{min-height:44px}
+.range input[type=range]{height:44px}
+.crumb a{display:inline-block;padding:10px 0;margin:-10px 0}
+/* кнопка связи над тёмными блоками */
+.fab.on-dark summary{background:var(--glow);color:#111114}
+/* меньше движения для тех, кто его отключил */
+@media (prefers-reduced-motion:reduce){
+  .fab summary{animation:none}
+  .rmap .mini{display:none}
+}
+.letters.auto:focus-within .track{animation-play-state:paused}
+/* вторые фото машин показываются только при наведении: на телефоне не грузим */
+@media (hover:none){.car .ph img + img{display:none}}
+
+/* фильтр автопарка: кнопки типов и поле «Сколько вас?» */
+.filters .chips{display:flex;gap:10px;flex-wrap:wrap}
+@media(max-width:600px){
+  .filters{flex-direction:column;align-items:stretch;flex-wrap:nowrap;overflow:visible;gap:10px}
+  .filters .chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:0 16px}
+  .filters .chips::-webkit-scrollbar{display:none}
+  .people{justify-content:space-between}
+  .people input{width:110px}
+}
+
+/* заявка в калькуляторе */
+.calc-order{margin-top:18px;padding:34px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.calc-order > *{position:relative;z-index:2}
+@media(min-width:901px){form.card.calc-order{grid-template-rows:none}}
+.co-head,.co-warn,.calc-order .small,.calc-order .btn{grid-column:1/-1}
+.co-head{display:flex;flex-direction:column;gap:10px;padding-bottom:18px;margin-bottom:4px;border-bottom:1px solid var(--line)}
+.co-pick{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
+.co-pick b{font-family:var(--wide);font-variation-settings:'wdth' 151,'opsz' 144;font-weight:900;font-size:clamp(18px,2vw,24px);text-transform:uppercase}
+.co-pick span{font-size:14px;color:var(--muted)}
+.co-warn{padding:16px 18px;border-radius:16px;background:rgba(var(--glow-rgb),.12);border:1px solid rgba(var(--glow-rgb),.55);font-size:14px;line-height:1.5}
+.co-warn p + p{margin-top:6px}
+.co-warn a{text-decoration:underline}
+.co-fit{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.co-fit .chip{font-size:11px;letter-spacing:.1em;padding:10px 14px}
+.calc-order input:user-invalid{border-color:var(--glow-text)}
+@media(max-width:600px){.calc-order{grid-template-columns:1fr;padding:22px}}
+
+@media(max-width:600px){
+  .filters{position:static}
+  .car .price{white-space:nowrap}
+  .car .price b{font-size:19px}
+}
