@@ -949,3 +949,12 @@ html.menu-open .topbar .logo{filter:brightness(0)}
 /* на касаниях карточки нажимаются быстро (0,12 с), но появление при листании должно идти полностью */
 @media (hover:none){.js .rv{transition-duration:1.1s !important}}
 @media (hover:none) and (prefers-reduced-motion:reduce){.js .rv{transition-duration:.8s !important}}
+/* правка 1 дизайн-разбора: все блоки из двух половин делятся по одной линии, правая половина = третья колонка карточек */
+@media(min-width:1101px){
+  .hero,.why,.routes,.order,.calc{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:18px}
+  .hero > :first-child,.why > :first-child,.routes > :first-child,.order > :first-child{grid-column:1 / 3;padding-right:clamp(32px,5vw,90px)}
+  .hero > :last-child,.why > :last-child,.routes > :last-child,.order > :last-child,.calc > :last-child{grid-column:3}
+  .calc > :first-child{grid-column:1 / 3}
+  .hero > div:first-child{min-width:0}
+}
+@media(min-width:1101px){form.card#order{grid-template-columns:minmax(0,1fr);grid-template-rows:none}}
