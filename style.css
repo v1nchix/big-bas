@@ -961,3 +961,12 @@ html.menu-open .topbar .logo{filter:brightness(0)}
 /* правка 2: надписи над дорогой в колонке сайта, автобус проезжает под ними свободно */
 .road{height:calc(min(860px,92vw) * .336 + 70px)}
 .road .say{top:20px;left:max(7vw,calc((100% - 1280px) / 2));right:max(7vw,calc((100% - 1280px) / 2))}
+/* правка 3: подвал по сетке карточек; шапка: логотип на левой линии колонки, кнопка на правой */
+@media(min-width:1101px){
+  .foot-grid{grid-template-columns:repeat(3,minmax(0,1fr));column-gap:18px;row-gap:32px}
+  .foot-grid .fcol.fbrand{grid-column:1 / 3;grid-row:1 / 4}
+  .foot-grid .fcol:not(.fbrand){grid-column:3}
+}
+@media(min-width:601px){
+  .topbar{margin:0;left:calc(max(7vw,(100% - 1280px) / 2) - 22px);right:auto;width:calc(min(1280px,100% - 14vw) + 31px)}
+}
