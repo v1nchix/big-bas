@@ -1224,3 +1224,33 @@ nav.crumb a{border-bottom:0}
 .art-sec{overflow:clip}
 /* заголовки внутри статьи меньше заголовков блоков: длинные фразы не разваливаются на 4 строки */
 .art-grid .prose > h2{font-size:clamp(21px,2.05vw,31px);line-height:1.12;letter-spacing:0}
+/* статьи на телефоне: колонка не шире экрана (таблицы распирали её до 820px), таблицы компактные */
+.art-grid > *{min-width:0}
+@media(max-width:900px){
+  .art-grid{grid-template-columns:minmax(0,1fr)}
+  .tbl{margin:18px 0;border-radius:14px}
+  .tbl table{font-size:13px}
+  .tbl th{white-space:normal;padding:11px 10px;font-size:9px;letter-spacing:.1em}
+  .tbl td{padding:10px}
+  .ex{padding:18px}
+  .art-aside .toc,.art-aside .more{padding:22px}
+}
+/* таблицы с длинными ячейками на телефоне: каждая строка карточкой, первая ячейка заголовком, подписи из шапки */
+@media(max-width:600px){
+  .tbl.stack{overflow:visible}
+  .tbl.stack table,.tbl.stack tbody,.tbl.stack tr,.tbl.stack td{display:block;width:100%}
+  .tbl.stack thead{display:none}
+  .tbl.stack tr{padding:14px 16px;border-bottom:1px solid var(--line)}
+  .tbl.stack tr:last-child{border-bottom:0}
+  .tbl.stack td{border:0;padding:5px 0;display:flex;justify-content:space-between;gap:14px;text-align:right;white-space:normal}
+  .tbl.stack td::before{content:attr(data-label);flex:0 0 42%;text-align:left;font-family:var(--wide);font-variation-settings:'wdth' 151,'opsz' 144;font-size:9px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--ink);padding-top:3px}
+  .tbl.stack td:first-child{display:block;text-align:left;padding:0 0 6px;color:var(--ink)}
+  .tbl.stack td:first-child::before{content:none}
+}
+@media(max-width:600px){
+  .tbl th{padding:10px 8px}
+  .tbl td{padding:9px 8px}
+  .tbl.stack td{padding:5px 0}
+  .tbl.stack td:first-child{padding:0 0 6px}
+}
+@media(max-width:380px){.tbl table{font-size:12px}.tbl th{letter-spacing:.06em}}
