@@ -1153,3 +1153,9 @@ nav.crumb a{color:inherit;border-bottom:1px solid rgba(160,82,26,.3)}
 .fleet-more .ico{border-color:rgba(var(--glow-rgb),.5);background:rgba(var(--glow-rgb),.12);color:var(--glow)}
 .fleet-more h3{color:#fff}
 @media(max-width:1100px){.fleet-more{grid-column:auto !important}}
+/* цена в карточке машины не переносит ₽ на новую строку */
+.car .row .price{white-space:nowrap}
+@media(max-width:1320px) and (min-width:601px){.car .price b{font-size:18px}.car .row .btn.sm{padding:12px 14px}}
+.car .row{flex-wrap:wrap;row-gap:12px}
+.car .body{container-type:inline-size}
+@container (max-width:330px){.car .row{flex-direction:column;align-items:stretch}.car .row .btn{width:100%}}
