@@ -1029,3 +1029,25 @@ form .via .btn{grid-column:auto}
   .order .contacts-list .card{flex:1}
   .order .maplink{flex:0 0 auto}
 }
+/* надпись над кнопками мессенджеров по центру */
+.via .label{text-align:center}
+/* телефон: форма заявки тёмной плашкой с заголовком, вариант Б (одобрен 09.10.2026) */
+.form-head{display:none}
+@media(max-width:900px){
+  #order{margin-top:44px;background:#111114;border-color:#111114;box-shadow:0 24px 60px rgba(17,17,20,.35)}
+  #order .form-head{display:block;grid-column:1 / -1;margin-bottom:6px}
+  #order .form-head .tag{margin-bottom:14px}
+  #order .form-head h3{font-size:22px;line-height:1.1;color:#fff}
+  #order .form-head p{margin-top:8px;font-size:14px;color:rgba(255,255,255,.6)}
+  #order .form-head .accent{background:linear-gradient(100deg,#fff 0%,#f7cf9f 40%,var(--glow) 100%);-webkit-background-clip:text;background-clip:text}
+  #order .label{color:rgba(255,255,255,.55)}
+  #order input,#order textarea{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.16);color:#fff;color-scheme:dark}
+  #order ::placeholder{color:rgba(255,255,255,.45)}
+  #order input[type=date].is-empty{color:rgba(255,255,255,.45)}
+  #order input:focus,#order textarea:focus{border-color:var(--glow)}
+  #order .via .btn.solid{background:var(--glow);border-color:var(--glow);color:#111114}
+  #order .via .btn svg{color:#111114}
+  #order .via .btn.solid:active{background:var(--glow-2);border-color:var(--glow-2)}
+  #order .small{color:rgba(255,255,255,.55)}
+  #order .small a{color:#fff}
+}
