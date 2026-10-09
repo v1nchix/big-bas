@@ -1254,3 +1254,44 @@ nav.crumb a{border-bottom:0}
   .tbl.stack td:first-child{padding:0 0 6px}
 }
 @media(max-width:380px){.tbl table{font-size:12px}.tbl th{letter-spacing:.06em}}
+/* статьи на телефоне, вторая версия: строки таблиц отдельными плашками, спокойные подписи, без оглавления в конце */
+@media(max-width:600px){
+  .art-grid .prose > h2{margin:48px 0 16px}
+  .art-grid .prose .answer{font-size:17px;line-height:1.55;padding:18px 20px;border-left:3px solid var(--glow);background:rgba(var(--glow-rgb),.08);border-radius:0 14px 14px 0}
+  .art-aside .toc{display:none}
+  .art-aside{margin-top:32px}
+  .tbl.stack{background:none;border:0;border-radius:0;margin:18px 0}
+  .tbl.stack tr{background:var(--panel);border:1px solid var(--line);border-radius:16px;margin-bottom:10px;padding:16px 18px;box-shadow:0 6px 20px rgba(17,17,20,.04)}
+  .tbl.stack tr:last-child{border-bottom:1px solid var(--line);margin-bottom:0}
+  .tbl.stack td{font-size:14px;line-height:1.45;color:var(--text);padding:7px 0;align-items:baseline}
+  .tbl.stack td + td{border-top:1px solid var(--line)}
+  .tbl.stack td::before{font-family:var(--body);font-variation-settings:normal;font-size:13px;letter-spacing:0;text-transform:none;font-weight:400;color:var(--muted);flex:0 0 44%;padding-top:0}
+  .tbl.stack td .v{flex:1;text-align:right}
+  .tbl.stack td b,.tbl.stack td.num{color:var(--text)}
+  .tbl.stack td:first-child{font-family:var(--wide);font-variation-settings:'wdth' 151,'opsz' 144;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.02em;line-height:1.25;padding:0 0 10px}
+  .tbl.stack td:first-child b{font-weight:800}
+  .tbl:not(.stack) td.num,.tbl:not(.stack) td b{color:var(--text)}
+  .tbl:not(.stack) th{color:var(--muted)}
+  .ex{padding:20px}
+  .ex .sum{display:flex;flex-direction:column;gap:4px}
+  .ex .sum small{margin-left:0}
+}
+.art-grid .prose .answer{color:var(--text)}
+@media(max-width:600px){.art-sec{padding-top:48px}}
+/* факты о месте в статье про поездки: три колонки на компьютере, строки на телефоне */
+.place-facts{display:grid;grid-template-columns:1fr 1fr 1.6fr;gap:0;padding:0;margin:18px 0}
+.place-facts > div{padding:16px 20px;display:flex;flex-direction:column;gap:6px}
+.place-facts > div + div{border-left:1px solid var(--line)}
+.place-facts span{font-size:12px;color:var(--muted)}
+.place-facts b{font-size:15px;font-weight:600;color:var(--text);line-height:1.4}
+@media(max-width:600px){
+  .place-facts{grid-template-columns:1fr}
+  .place-facts > div{flex-direction:row;justify-content:space-between;gap:14px;padding:12px 18px}
+  .place-facts > div + div{border-left:0;border-top:1px solid var(--line)}
+  .place-facts span{flex:0 0 44%;font-size:13px}
+  .place-facts b{text-align:right;font-size:14px}
+  .tbl.stack td:first-child{color:var(--text)}
+}
+.tbl th{white-space:normal;vertical-align:bottom}
+@media(max-width:1100px){.tbl td.num{white-space:normal}.tbl td{padding-left:12px;padding-right:12px}}
+@media(min-width:601px) and (max-width:1100px){.tbl th{font-size:9px;letter-spacing:.05em;padding-left:12px;padding-right:12px}}
