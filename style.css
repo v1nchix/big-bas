@@ -1164,3 +1164,7 @@ nav.crumb a{color:inherit;border-bottom:1px solid rgba(160,82,26,.3)}
 .faq-aside{justify-content:space-between}
 .faq-cta .btn svg{color:currentColor}
 .faq-cta .btn:not(.solid) svg{color:#25d366}
+/* строка навигации: без подчёркивания, на телефоне оно ложилось на перенесённую строку как зачёркивание */
+nav.crumb a{border-bottom:0}
+/* телефон: фото первым, как видео на главной */
+@media(max-width:900px){.seo-hero-grid > :first-child{order:2}.seo-photo{order:1;margin:0 0 30px}}
