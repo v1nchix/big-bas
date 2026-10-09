@@ -1053,3 +1053,62 @@ form .via .btn{grid-column:auto}
 }
 /* подвал: номер тем же шрифтом и размером, что почта и адрес (телефон и компьютер) */
 .foot .fphone,footer .fphone{font-family:var(--body) !important;font-variation-settings:normal !important;font-weight:400 !important;font-size:14px !important;letter-spacing:0 !important;color:#e4e4e8 !important}
+/* ===== SEO-страницы: услуги, модели, о компании ===== */
+.page-hero .btns{margin-top:30px}
+nav.crumb a{color:inherit;border-bottom:1px solid rgba(160,82,26,.3)}
+.prose{max-width:760px}
+.prose h2{margin-bottom:22px}
+.prose p,.prose li{font-size:16px;line-height:1.7;color:var(--muted);font-weight:400}
+.prose p + p{margin-top:14px}
+.prose ul{margin:6px 0 14px 20px}
+.prose li + li{margin-top:6px}
+.prose a{color:var(--ink);border-bottom:1px solid rgba(160,82,26,.35)}
+.faq{display:grid;gap:12px;margin-top:40px;max-width:900px}
+.faq details{padding:0}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px 26px;font-family:var(--wide);font-variation-settings:'wdth' 151,'opsz' 144;font-weight:800;font-size:14px;letter-spacing:.03em;text-transform:uppercase;position:relative;z-index:2}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-family:var(--body);font-weight:300;font-size:26px;line-height:1;color:var(--ink);transition:transform .25s var(--ease-out)}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq .ans{padding:0 26px 22px;position:relative;z-index:2}
+.faq .ans p{margin:0;font-size:15px}
+.links-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:40px}
+.link-card{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:22px 24px}
+.link-card > *{position:relative;z-index:2}
+.link-card b{font-family:var(--wide);font-variation-settings:'wdth' 151,'opsz' 144;font-weight:800;font-size:13px;letter-spacing:.04em;text-transform:uppercase}
+.link-card span{color:var(--glow-text)}
+.car h3 a{color:inherit}
+.model-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:18px;align-items:center}
+.model-grid > :first-child{grid-column:1 / 3;padding-right:clamp(32px,5vw,90px)}
+.model-grid .facts{margin-top:28px}
+.model-ph{padding:9px;display:grid;gap:9px}
+.model-ph img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px;position:relative;z-index:2}
+.model-info{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:18px;align-items:start}
+.model-info .prose{grid-column:1 / 3;padding-right:clamp(32px,5vw,90px)}
+.model-info .mcalc{grid-column:3}
+.why-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.why-list .card h3{position:relative;z-index:2}
+.why-list .card p{position:relative;z-index:2}
+.why-list .todo{border-style:dashed}
+.letters-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.letters-grid a{padding:10px}
+.letters-grid img{width:100%;aspect-ratio:3/4;object-fit:cover;object-position:top;border-radius:12px;position:relative;z-index:2}
+.letters-grid span{display:block;font-size:12px;color:var(--muted);line-height:1.45;margin:12px 4px 2px;position:relative;z-index:2}
+@media(max-width:900px){
+  .links-grid,.letters-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .model-grid,.model-info{grid-template-columns:1fr}
+  .model-grid > :first-child,.model-info .prose{grid-column:auto;padding-right:0}
+  .model-info .mcalc{grid-column:auto;margin-top:24px}
+  .model-ph{margin-top:28px}
+  .why-list{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .links-grid{grid-template-columns:1fr}
+  .faq summary{padding:18px 18px;font-size:12.5px}
+  .faq .ans{padding:0 18px 18px}
+}
+/* главная: H1 с ключом в строке над слоганом, слоган выглядит как прежний заголовок */
+.hero h1.crumb{font-size:11px;font-weight:600;line-height:1.5;letter-spacing:.3em;text-transform:uppercase}
+@media(max-width:600px){.hero h1.crumb{letter-spacing:.16em}}
+.h1{font-family:var(--wide);font-variation-settings:'wdth' 151,'opsz' 144;font-weight:900;text-transform:uppercase;line-height:.98;letter-spacing:-.005em;font-size:clamp(36px,5.6vw,88px)}
+/* текст и вопросы шириной ровно в две колонки сетки */
+@media(min-width:901px){.prose,.faq{max-width:calc((100% - 36px) / 3 * 2 + 18px)}}

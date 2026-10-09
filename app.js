@@ -10,7 +10,7 @@ const intro=document.documentElement.classList.contains('has-intro');
 if(intro)setTimeout(()=>{document.documentElement.classList.remove('has-intro');try{sessionStorage.setItem('bb-intro','1')}catch(e){}},1650);
 
 // появление при прокрутке: блоки всплывают по очереди
-const rvSel='.hero .crumb,.hero h1,.hero .lead,.hero .btns,.hero .trust,.stage,.page-hero h1,.facts,.stats .card,.bento .svc,.mapcard';
+const rvSel='.hero .crumb,.hero h1,.hero .h1,.hero .lead,.hero .btns,.hero .trust,.stage,.page-hero h1,.facts,.stats .card,.bento .svc,.mapcard';
 // на телефоне первый экран виден сразу, остальные блоки плавно проявляются при листании
 const mobRv=matchMedia('(max-width:900px)').matches;
 const rvItems=[...document.querySelectorAll(rvSel)].filter(e=>!e.closest('.intro,.fab,.topbar,.foot,.steps4')&&!(mobRv&&e.closest('.hero,.page-hero')));
@@ -119,7 +119,7 @@ if(form){
 }
 
 // автопарк: фильтр по типу и числу пассажиров (считаем сидячие места)
-const cars=[...document.querySelectorAll('.car')];
+const cars=document.getElementById('people')?[...document.querySelectorAll('.car')]:[];
 const sitOf=c=>+(c.dataset.sit||c.dataset.seats);
 if(cars.length){
   const chips=[...document.querySelectorAll('.chip')],people=document.getElementById('people'),empty=document.querySelector('.empty');
@@ -356,3 +356,10 @@ if(fab&&'IntersectionObserver' in window){
 
 // пустая дата серая, как подсказки в других полях
 document.querySelectorAll('input[type=date]').forEach(i=>{const f=()=>i.classList.toggle('is-empty',!i.value);f();i.addEventListener('input',f);i.addEventListener('change',f)});
+
+// страница модели: калькулятор стоимости одной машины
+document.querySelectorAll('.mcalc').forEach(b=>{
+  const price=+b.dataset.price,min=+b.dataset.min,extra=+b.dataset.extra,r=b.querySelector('input[type=range]'),o=b.querySelector('output'),s=b.querySelector('.sum'),how=b.querySelector('.how');
+  const calc=()=>{const h=Math.max(+r.value,min);o.textContent=h+' ч';s.innerHTML=rub(price*(h+extra)).replace(' ₽','<small> ₽</small>');how.textContent=rub(price)+'/час × ('+h+' ч работы + '+extra+' ч подачи)'};
+  r.addEventListener('input',calc);calc();
+});
