@@ -1159,3 +1159,8 @@ nav.crumb a{color:inherit;border-bottom:1px solid rgba(160,82,26,.3)}
 .car .row{flex-wrap:wrap;row-gap:12px}
 .car .body{container-type:inline-size}
 @container (max-width:330px){.car .row{flex-direction:column;align-items:stretch}.car .row .btn{width:100%}}
+/* вопросы и карточка «Не нашли ответ?» одной высоты; зелёная только иконка WhatsApp */
+.faq-grid{align-items:stretch}
+.faq-aside{justify-content:space-between}
+.faq-cta .btn svg{color:currentColor}
+.faq-cta .btn:not(.solid) svg{color:#25d366}
