@@ -1,8 +1,34 @@
-// благодарственные письма листаются сами: дублируем ленту для бесконечной прокрутки
-const lt=document.querySelector('.letters .track');
+// благодарственные письма: лента едет сама, но её можно листать вручную (палец, колесо, тачпад, мышь, стрелки).
+// Пока человек листает, автопрокрутка стоит и включается снова через 2,5 с. Лента задублирована для бесконечного круга.
+const lt=document.querySelector(".letters .track");
 if(lt){
-  [...lt.children].forEach(a=>{const c=a.cloneNode(true);c.setAttribute('aria-hidden','true');c.tabIndex=-1;lt.appendChild(c)});
-  lt.parentElement.classList.add('auto');
+  const box=lt.parentElement;
+  const orig=[...lt.children];
+  box.classList.add("auto");
+  // длина одного круга писем; копий добавляем столько, чтобы на широком экране лента не кончалась
+  const half=()=>orig[orig.length-1].offsetLeft+orig[orig.length-1].offsetWidth+18-orig[0].offsetLeft;
+  const fill=()=>{while(lt.scrollWidth<half()*2+box.clientWidth)orig.forEach(a=>{const c=a.cloneNode(true);c.setAttribute("aria-hidden","true");c.tabIndex=-1;lt.appendChild(c)})};
+  fill();addEventListener("resize",fill);
+  const still=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let pos=1,last=0,hold=0,hover=false,down=null,moved=false;
+  const pause=(ms=2500)=>{hold=performance.now()+ms};
+  const wrap=()=>{const w=half();let d=0;if(box.scrollLeft>=w)d=-w;else if(box.scrollLeft<=0)d=w;if(d){box.scrollLeft+=d;if(down)down.s+=d}pos=box.scrollLeft};
+  box.scrollLeft=1;
+  const tick=t=>{const dt=last?Math.min(t-last,64):0;last=t;
+    if(!still&&!hover&&!down&&t>hold&&!document.hidden){pos+=dt*half()/22000;if(pos>=half())pos-=half();box.scrollLeft=pos}
+    requestAnimationFrame(tick)};
+  requestAnimationFrame(tick);
+  // если положение ушло от нашего, ленту листает человек: ставим автопрокрутку на паузу
+  box.addEventListener("scroll",()=>{if(Math.abs(box.scrollLeft-pos)>2){pause();wrap()}},{passive:true});
+  ["touchstart","wheel","focusin"].forEach(ev=>box.addEventListener(ev,()=>pause(),{passive:true}));
+  if(matchMedia("(hover:hover) and (pointer:fine)").matches){box.addEventListener("mouseenter",()=>hover=true);box.addEventListener("mouseleave",()=>{hover=false;pause(800)})}
+  document.querySelectorAll(".letters-nav .ln-btn").forEach(b=>b.addEventListener("click",()=>{const a=lt.querySelector("a");pause(3000);box.scrollBy({left:+b.dataset.dir*((a?a.getBoundingClientRect().width:240)+18),behavior:"smooth"})}));
+  // мышью ленту можно тащить; клик после перетаскивания не открывает письмо
+  box.addEventListener("pointerdown",e=>{if(e.pointerType!=="mouse")return;down={x:e.clientX,s:box.scrollLeft};moved=false});
+  addEventListener("pointermove",e=>{if(!down)return;const dx=e.clientX-down.x;if(Math.abs(dx)>5){moved=true;box.classList.add("drag")}box.scrollLeft=down.s-dx});
+  addEventListener("pointerup",()=>{if(!down)return;down=null;box.classList.remove("drag");pause()});
+  box.addEventListener("click",e=>{if(moved){e.preventDefault();moved=false}},true);
+  box.addEventListener("dragstart",e=>e.preventDefault());
 }
 
 // интро: показываем один раз за визит

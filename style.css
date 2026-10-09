@@ -1295,3 +1295,14 @@ nav.crumb a{border-bottom:0}
 .tbl th{white-space:normal;vertical-align:bottom}
 @media(max-width:1100px){.tbl td.num{white-space:normal}.tbl td{padding-left:12px;padding-right:12px}}
 @media(min-width:601px) and (max-width:1100px){.tbl th{font-size:9px;letter-spacing:.05em;padding-left:12px;padding-right:12px}}
+/* благодарственные письма: лента едет сама (скрипт), но листается и вручную */
+.letters.auto{overflow-x:auto;scrollbar-width:none;cursor:grab;overscroll-behavior-x:contain}
+.letters.auto::-webkit-scrollbar{display:none}
+.letters.auto .track{animation:none}
+.letters.auto.drag{cursor:grabbing;user-select:none}
+.letters.auto.drag a{pointer-events:none}
+.letters-nav{display:flex;justify-content:flex-end;gap:10px;margin-top:4px}
+.ln-btn{width:50px;height:50px;border-radius:100px;border:1px solid var(--line);background:var(--panel);color:var(--text);display:grid;place-items:center;cursor:pointer;transition:background .25s,color .25s,border-color .25s}
+.ln-btn svg{width:20px;height:20px}
+@media (hover:hover) and (pointer:fine){.ln-btn:hover{background:var(--text);color:#fff;border-color:var(--text)}}
+.ln-btn:active{transform:scale(.96)}
