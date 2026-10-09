@@ -1112,3 +1112,44 @@ nav.crumb a{color:inherit;border-bottom:1px solid rgba(160,82,26,.3)}
 .h1{font-family:var(--wide);font-variation-settings:'wdth' 151,'opsz' 144;font-weight:900;text-transform:uppercase;line-height:.98;letter-spacing:-.005em;font-size:clamp(36px,5.6vw,88px)}
 /* текст и вопросы шириной ровно в две колонки сетки */
 @media(min-width:901px){.prose,.faq{max-width:calc((100% - 36px) / 3 * 2 + 18px)}}
+/* ===== SEO-страницы v2: как главная. Первый экран: текст в 2 колонки, фото в 3-й ===== */
+.seo-hero{padding-bottom:70px}
+.seo-hero-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:18px;align-items:center}
+.seo-hero-grid > :first-child{grid-column:1 / 3;padding-right:clamp(32px,5vw,90px)}
+.seo-hero-grid .lead{max-width:560px}
+.seo-hero-grid .facts{margin-top:30px}
+.seo-photo{grid-column:3;height:min(64vh,560px)}
+.seo-photo img{position:absolute;inset:9px;width:calc(100% - 18px);height:calc(100% - 18px);object-fit:cover;border-radius:25px;z-index:1}
+.seo-photo .float{z-index:4}
+/* заголовок сам уменьшается под самое длинное слово (--L букв), чтобы не вылезать из колонки */
+.seo-hero h1,.model h1{font-size:min(clamp(36px,5.6vw,88px),calc(52vw / (var(--L,8) * 1.02)),calc(760px / (var(--L,8) * 1.02)))}
+.seo-cards{margin-top:50px}
+.seo-cards .card > *{position:relative;z-index:2}
+.seo-cards .card p a{color:var(--ink);border-bottom:1px solid rgba(160,82,26,.35)}
+.why-list .card > *{position:relative;z-index:2}
+.faq-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:50px;align-items:start}
+.faq-grid .faq{grid-column:1 / 3;margin-top:0;max-width:none}
+.faq-aside{grid-column:3;gap:28px;padding:30px 28px}
+.faq-aside h3{color:#fff;margin-top:4px}
+.faq-aside .ico{border-color:rgba(var(--glow-rgb),.5);background:rgba(var(--glow-rgb),.12);color:var(--glow)}
+.faq-cta{display:grid;gap:10px;position:relative;z-index:2}
+.faq-cta .btn{width:100%}
+.faq-cta .btn:not(.solid){color:#fff;border-color:rgba(255,255,255,.2);background:transparent}
+.faq-cta .btn svg{width:18px;height:18px;color:#25d366}
+@media(max-width:900px){
+  .seo-hero-grid{grid-template-columns:1fr}
+  .seo-hero-grid > :first-child{grid-column:auto;padding-right:0}
+  .seo-photo{grid-column:auto;height:320px;margin-top:34px}
+  .seo-hero h1,.model h1{font-size:min(clamp(32px,6.4vw,64px),calc(86vw / (var(--L,8) * 1.02)))}
+  .faq-grid{grid-template-columns:1fr}
+  .faq-grid .faq,.faq-aside{grid-column:auto}
+}
+@media(max-width:600px){
+  .seo-hero h1,.model h1{font-size:min(36px,calc((100vw - 32px) / (var(--L,8) * 1.02)))}
+  .seo-photo{height:260px}
+}
+/* карточка «Весь автопарк» закрывает неполный ряд машин */
+.fleet-more{justify-content:space-between;gap:24px}
+.fleet-more .ico{border-color:rgba(var(--glow-rgb),.5);background:rgba(var(--glow-rgb),.12);color:var(--glow)}
+.fleet-more h3{color:#fff}
+@media(max-width:1100px){.fleet-more{grid-column:auto !important}}
