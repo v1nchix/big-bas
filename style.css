@@ -1306,3 +1306,5 @@ nav.crumb a{border-bottom:0}
 .ln-btn svg{width:20px;height:20px}
 @media (hover:hover) and (pointer:fine){.ln-btn:hover{background:var(--text);color:#fff;border-color:var(--text)}}
 .ln-btn:active{transform:scale(.96)}
+/* стрелки писем по центру под лентой */
+.letters-nav{justify-content:center}
