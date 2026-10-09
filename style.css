@@ -1315,3 +1315,5 @@ nav.crumb a{border-bottom:0}
   .letters-nav .ln-btn{pointer-events:auto;background:rgba(255,255,255,.92);box-shadow:0 8px 24px rgba(17,17,20,.12);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 }
 @media(min-width:601px){.letters-nav{top:12px;bottom:72px}}
+/* на телефоне письма листают пальцем, стрелки не нужны */
+@media(max-width:600px){.letters-nav{display:none}}
