@@ -1222,3 +1222,5 @@ nav.crumb a{border-bottom:0}
 }
 /* иначе оглавление не прилипает: overflow:hidden у секции ломает sticky */
 .art-sec{overflow:clip}
+/* заголовки внутри статьи меньше заголовков блоков: длинные фразы не разваливаются на 4 строки */
+.art-grid .prose > h2{font-size:clamp(21px,2.05vw,31px);line-height:1.12;letter-spacing:0}
