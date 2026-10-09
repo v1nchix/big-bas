@@ -1308,3 +1308,10 @@ nav.crumb a{border-bottom:0}
 .ln-btn:active{transform:scale(.96)}
 /* стрелки писем по центру под лентой */
 .letters-nav{justify-content:center}
+/* стрелки писем по бокам ленты на компьютере: по краям колонки, по центру высоты писем; на телефоне под лентой */
+.letters-box{position:relative}
+@media(min-width:601px){
+  .letters-nav{position:absolute;left:0;right:0;top:60px;bottom:24px;margin:0;justify-content:space-between;align-items:center;pointer-events:none;z-index:3}
+  .letters-nav .ln-btn{pointer-events:auto;background:rgba(255,255,255,.92);box-shadow:0 8px 24px rgba(17,17,20,.12);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+}
+@media(min-width:601px){.letters-nav{top:12px;bottom:72px}}
